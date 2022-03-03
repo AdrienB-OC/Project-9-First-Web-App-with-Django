@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Vous répondez à la requête suivante :</h2>
+    <p>{{ ticket.user.username }}</p>
+    <p>{{ ticket.title }}</p>
+    <p>{{ ticket.description }}</p>
+    <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}"
+         title="{{ ticket.title }}"
+             width="150"
+             height="250">
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Envoyer ma critique</button>
+    </form>
+{% endblock content %}

@@ -1,16 +1,25 @@
-<!DOCTYPE html>
+{% load static %}
 <html>
     <head>
         <meta charset="UTF-8">
         <title>LITReview</title>
+        <link rel="stylesheet" href="{% static 'app.css' %}">
     </head>
     <body>
+        <nav>
+            {%  if user.is_authenticated %}
+            <p>Bienvenue {{ request.user.username }}</p>
+            <ul>
+                <li><a href="{% url 'home' %}">Accueil</a></li>
+                <li><a href="{% url 'write_ticket' %}">Demander une critique</a></li>
+                <li><a href="{% url 'post_review' %}">Poster une critique</a></li>
+                <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+            </ul>
+            {% endif %}
+        </nav>
         <h1>LITReview</h1>
         {% block content %}
         {% endblock content %}
-        {%  if user.is_authenticated %}
-            <p>Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
-            <p>Voulez-vous <a href="{% url 'password_change' %}">changer votre mot de passe ?</a></p>
-        {% endif %}
+
     </body>
 </html>

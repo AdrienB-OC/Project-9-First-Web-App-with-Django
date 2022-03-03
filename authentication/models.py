@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    following = models.ManyToManyField(
+    follow = models.ManyToManyField(
         "self", blank=True, related_name="followers", symmetrical=False
     )
     email = models.EmailField(unique=True)

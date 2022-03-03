@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView, \
     PasswordChangeView, PasswordChangeDoneView
 
@@ -36,6 +38,19 @@ urlpatterns = [
         template_name='authentication/password_change_done.html'),
          name='password_change_done'
          ),
-    path('home/', reviews.views.home, name='home'),
-    path('signup/', authentication.views.signup_page, name='signup')
+    path('home/', reviews.views.HomeView.as_view(), name='home'),
+    path('signup/', authentication.views.signup_page, name='signup'),
+    path('write_ticket/', reviews.views.write_ticket, name='write_ticket'),
+    path('ticket_reply/<int:id>', reviews.views.WriteReview.as_view(),
+         name='ticket_reply'),
+    path('write_review/', reviews.views.write_ticket_review,
+         name='post_review'),
+    path('error/', reviews.views.ticket_error, name='ticket_error'),
+    path('follow/', reviews.views.follow_user, name='follow'),
+    path('follow_success/', reviews.views.follow_success,
+         name='follow_success')
 ]
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

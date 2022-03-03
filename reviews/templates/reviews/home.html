@@ -1,4 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p>Vous êtes connecté !</p>
+    {% for post in list %}
+        <!-- Ticket -->
+        {% if post.title %}
+            <div class="ticket-display">
+                <p> <strong>{{ post.user.username }}</strong> a demandé une
+                    critique</p>
+                <p> Titre du livre : {{ post.title }} </p>
+                <p> {{ post.description }} </p>
+                {% if post.image.url != NULL %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title}}" title="{{ post.title}}"
+                     width="150"
+                     height="250">
+            {% endif %}
+            {% if not post.review %}
+
+                <form action="/ticket_reply/{{ post.id }}" method="post"
+                      id="ticket_reply">
+                    {% csrf_token %}
+                    <button type="submit" name="ticket_id"
+                            value="{{ post.id }}" form="ticket_reply">Répondre à
+                        cette demande
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        {% endif %}
+        <!-- Review -->
+        {% if post.headline %}
+            <div class="review-display">
+                <p> <strong>{{ post.user.username }}</strong> a posté une critique</p>
+                <p>Rating : {{ post.rating }}</p>
+                <p>Titre de la critique : {{ post.headline }}</p>
+                <p>Critique : {{ post.body }}</p>
+                <!-- Related ticket -->
+                <div class="related-ticket">
+                    <p>Ticket - <strong>{{ post.ticket.user.username }}</strong></p>
+                    <p>{{ post.ticket.title }}</p>
+                    <p>{{ post.ticket.description }}</p>
+
+                    {% if post.ticket.image.url != NULL %}
+                        <img src="{{ post.ticket.image.url }}"
+                             alt="{{ post.ticket.title}}"
+                             title="{{ post.ticket.title}}"
+                         width="150"
+                         height="250">
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
 {% endblock content %}

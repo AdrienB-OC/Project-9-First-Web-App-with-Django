@@ -1,0 +1,24 @@
+body {
+    background-color: #fff;
+    font-family:  Verdana, Tahoma, Garamond, Georgia, sans-serif; 
+}
+
+.ticket-display{
+    border: solid 2px black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.review-display{
+    border: solid 2px black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.related-ticket{
+
+    border: solid 2px black;
+    width: 80%;
+    margin: auto;
+    padding: 10px;
+}
