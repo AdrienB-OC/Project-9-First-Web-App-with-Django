@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Utilisateur suivi avec succès !</h2>
+    <h2>Vous ne suivez plus {{ followed_user.username }}</h2>
     <a href="{% url 'follow' %}">Retour</a>
-
 {% endblock content %}

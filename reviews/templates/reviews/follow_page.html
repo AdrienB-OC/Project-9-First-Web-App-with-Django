@@ -2,9 +2,27 @@
 {% block content %}
     <h2>Suivre d'autres utilisateurs</h2>
 
-    <form action="{% url 'follow_success' %} "method="post">
-        <input type="text" name="search"/>
+    <form method="post">
+        {{ form.as_p }}
         {% csrf_token %}
-        <button type="submit">Suivre</button>
+        <button type="submit" name="follow">Suivre cet utilisateur</button>
     </form>
+    {% if follow %}
+        <h2>Utilisateurs suivi</h2>
+        {% for followed in follow %}
+            <form action="/unfollow/{{ followed.id }}"method="post">
+                {% csrf_token %}
+                <p>{{ followed.username }}</p>
+                <button type="submit" name="unfollow"
+                        value="{{ followed.id }}">Ne plus suivre</button>
+            </form>
+        {% endfor %}
+    {% endif %}
+
+    {% if followed_by %}
+        <h2>Utilisateurs qui vous suivent</h2>
+        {% for follower in followed_by %}
+                <p>{{ follower.username }}</p>
+        {% endfor %}
+    {% endif %}
 {% endblock content %}

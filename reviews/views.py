@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from itertools import chain
 from . import forms, models
 from authentication.models import User
@@ -10,8 +11,14 @@ from authentication.models import User
 
 @login_required
 def home(request):
-    tickets = models.Ticket.objects.all()
-    reviews = models.Review.objects.all()
+    user = request.user
+    
+    tickets = models.Ticket.objects.filter(
+        Q(user__in=user.follow.all()) | Q(user=user))
+    print(tickets)
+    reviews = models.Review.objects.filter(
+        Q(user__in=user.follow.all()) | Q(user=user))
+    print(reviews)
     context = {
         'posts': tickets,
         'reviews': reviews,
@@ -25,25 +32,19 @@ class HomeView(LoginRequiredMixin, ListView):
     model = models.Ticket
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
         context = super(HomeView, self).get_context_data(**kwargs)
-        tickets = models.Ticket.objects.filter()
-        reviews = models.Review.objects.filter()
+        tickets = models.Ticket.objects.filter(
+            Q(user__in=user.follow.all()) | Q(user=user)
+        )
+        reviews = models.Review.objects.filter(
+            Q(user__in=user.follow.all()) | Q(user=user)
+        )
         posts_list = sorted(chain(tickets, reviews),
                             key=lambda x: x.time_created, reverse=True)
         context.update({
             'list': posts_list,
         })
-        return context
-
-
-class HomeView2(LoginRequiredMixin, ListView):
-    template_name = 'reviews/home.html'
-    model = models.Ticket
-
-    def get_context_data(self, **kwargs):
-        context = super(HomeView2, self).get_context_data(**kwargs)
-        context['tickets'] = models.Ticket.objects.all()
-        context['reviews'] = models.Review.objects.all()
         return context
 
 
@@ -69,14 +70,14 @@ class WriteTicketView(LoginRequiredMixin, FormView):
     template_name = 'reviews/ticket.html'
     form_class = forms.TicketForm
 
-    success_url = ''
+    success_url = 'success'
 
 
 @login_required
 def write_review(request, id):
     form = forms.ReviewForm()
     ticket = models.Ticket.objects.get(id=id)
-
+    # check if ticket already has a review
     if request.method == 'POST':
         if id is None:
             return redirect('ticket_error')
@@ -151,17 +152,54 @@ def write_ticket_review(request):
 
 @login_required
 def follow_user(request):
-    if 'search' in request.POST:
-        f_user = request.POST['search']
-        print(f_user)
-        user = request.user
-        user.following.add(f_user)
-        user_follow = models.UserFollows.objects.create(user=user.pk,
-                                                        follow_user=f_user.pk)
-        user_follow.save()
-        return redirect('reviews/follow_success.html')
+    form = forms.FollowForm()
+    user = request.user
 
-    return render(request, 'reviews/follow_page.html')
+    follow_pk = models.UserFollows.objects.all().filter(user=user.pk).values(
+        'followed_user')
+    follow_list = []
+    for f in follow_pk:
+        follow_list.append(f['followed_user'])
+    follow = User.objects.all().filter(pk__in=follow_list)
+
+    followed_by_pk = models.UserFollows.objects.all().filter(
+        followed_user=user.pk).values('user')
+    followed_list = []
+    for f in followed_by_pk:
+        followed_list.append(f['user'])
+    followed_by = User.objects.all().filter(pk__in=followed_list)
+
+    if request.method == 'POST':
+        form = forms.FollowForm(request.POST)
+        if form.is_valid():
+            follow = form.save(commit=False)
+            follow.user = user
+            follow.save()
+            user.follow.add(follow.followed_user)
+            return redirect('follow_success')
+
+    context = {
+        'form': form,
+        'follow': follow,
+        'followed_by': followed_by,
+    }
+
+    return render(request, 'reviews/follow_page.html', context=context)
+
+
+@login_required
+def unfollow_user(request, id):
+    user = request.user
+    followed_user = User.objects.get(pk=id)
+
+    if request.method == 'POST':
+        user.follow.remove(followed_user)
+        user_follow = models.UserFollows.objects.filter(
+            user=user.pk, followed_user=followed_user.pk)
+        user_follow.delete()
+
+    return render(request, 'reviews/unfollow.html', context={
+        'followed_user': followed_user})
 
 
 @login_required

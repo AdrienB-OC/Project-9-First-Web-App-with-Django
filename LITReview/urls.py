@@ -41,14 +41,17 @@ urlpatterns = [
     path('home/', reviews.views.HomeView.as_view(), name='home'),
     path('signup/', authentication.views.signup_page, name='signup'),
     path('write_ticket/', reviews.views.write_ticket, name='write_ticket'),
-    path('ticket_reply/<int:id>', reviews.views.WriteReview.as_view(),
+    path('write_ticket/success/', reviews.views.write_ticket,
+         name='write_ticket_success'),
+    path('ticket_reply/<int:id>', reviews.views.write_review,
          name='ticket_reply'),
     path('write_review/', reviews.views.write_ticket_review,
          name='post_review'),
     path('error/', reviews.views.ticket_error, name='ticket_error'),
     path('follow/', reviews.views.follow_user, name='follow'),
     path('follow_success/', reviews.views.follow_success,
-         name='follow_success')
+         name='follow_success'),
+    path('unfollow/<int:id>', reviews.views.unfollow_user, name='unfollow')
 ]
 if settings.DEBUG:
     urlpatterns += static(
