@@ -14,22 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView, \
     PasswordChangeView, PasswordChangeDoneView
 
-import authentication.views
-import reviews.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', LoginView.as_view(
-        template_name='authentication/login.html',
-        redirect_authenticated_user=True),
-         name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
     path('change-password/', PasswordChangeView.as_view(
         template_name='authentication/password_change_form.html'),
          name='password_change'
@@ -38,20 +31,8 @@ urlpatterns = [
         template_name='authentication/password_change_done.html'),
          name='password_change_done'
          ),
-    path('home/', reviews.views.HomeView.as_view(), name='home'),
-    path('signup/', authentication.views.signup_page, name='signup'),
-    path('write_ticket/', reviews.views.write_ticket, name='write_ticket'),
-    path('write_ticket/success/', reviews.views.write_ticket,
-         name='write_ticket_success'),
-    path('ticket_reply/<int:id>', reviews.views.write_review,
-         name='ticket_reply'),
-    path('write_review/', reviews.views.write_ticket_review,
-         name='post_review'),
-    path('error/', reviews.views.ticket_error, name='ticket_error'),
-    path('follow/', reviews.views.follow_user, name='follow'),
-    path('follow_success/', reviews.views.follow_success,
-         name='follow_success'),
-    path('unfollow/<int:id>', reviews.views.unfollow_user, name='unfollow')
+    path('', include('reviews.urls')),
+    path('', include('authentication.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(
