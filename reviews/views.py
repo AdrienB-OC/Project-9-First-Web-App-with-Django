@@ -172,10 +172,16 @@ def follow_user(request):
     if request.method == 'POST':
         form = forms.FollowForm(request.POST)
         if form.is_valid():
-            follow = form.save(commit=False)
-            follow.user = user
-            follow.save()
-            user.follow.add(follow.followed_user)
+            follow_name = form.cleaned_data['follow_user']
+            follow_u = User.objects.get(username=follow_name)
+            if follow_u:
+                user_follows = models.UserFollows(user=user,
+                                                  followed_user=follow_u)
+                user_follows.save()
+                user.follow.add(follow_u)
+            #follow.user = user
+            #follow.save()
+            #user.follow.add(follow.followed_user)
             return redirect('follow_success')
 
     context = {
