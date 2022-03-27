@@ -9,14 +9,21 @@ class TicketForm(forms.ModelForm):
         fields = ['title', 'description', 'image']
 
 
+RATING_CHOICES = [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')]
+
+
 class ReviewForm(forms.ModelForm):
+    rating = forms.ChoiceField(label="Note", required=True,
+                               choices=RATING_CHOICES,
+                               widget=forms.RadioSelect)
+
     class Meta:
         model = models.Review
-        fields = ['rating', 'headline', 'body']
+        fields = ['headline', 'body']
 
 
 class FollowForm(forms.ModelForm):
-    follow_user = forms.CharField()
+    follow_user = forms.CharField(label="")
 
     class Meta:
         model = models.UserFollows

@@ -1,10 +1,25 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <p>{{ message }}</p>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit" >Se connecter</button>
-    </form>
-    <a href="{% url 'signup' %}">Inscrivez-vous !</a>
+    <h1 id="login-title">LITReview </h1>
+    <div class="flex-container">
+
+        <div class="flex-child sign-up">
+
+            <a href="{% url 'signup' %}" type="button" class="btn btn-outline-dark signup-btn">Inscrivez-vous !</a>
+        </div>
+
+        <div class="flex-child login">
+            <form method="post">
+                <table>
+                {{ form|crispy }}
+                {% csrf_token %}
+                    </table>
+                <button type="submit button" id="login-button" class="btn btn-outline-dark">Se
+                    connecter</button>
+
+            </form>
+        </div>
+        
+    </div>
 {% endblock content %}

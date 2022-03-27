@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p class="delete-msg">Etes-vous sûr de vouloir supprimer cette demande ? </p>
+    <div class="delete-post">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button type="submit button" class="btn btn-outline-danger delete-yes">Oui</button>
+            <a href="/home/" type="button" class="btn btn-outline-dark delete-no">Non</a>
+        </form>
+
+    </div>
+
+    <div class="ticket-display">
+                <p class="post-time">{{ post.time_created }}</p>
+                {% if request.user == post.user %}      
+                    <p class="post-author"> <strong>Vous</strong> avez posté une demande critique</p>
+                {% else %}
+                    <p class="post-author"> <strong>{{ post.user.username }}</strong> a posté une demande critique</p>
+                {% endif %}
+
+                <p class="post-title"> <strong> {{ post.title }} </strong></p>
+                <p class="post-body"> {{ post.description }} </p>
+
+                {% if post.image.url != NULL %}
+                    <img class="post-img" src="{{ post.image.url }}" alt="{{ post.title}}" title="{{ post.title}}" width="150" height="250">
+                {% endif %}
+            
+
+            </div>
+
+        </div>
+{% endblock content %}

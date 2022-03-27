@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h2>Demander une critique</h2>
+    <p>Editer ma demande</p>
     <form method="post" enctype="multipart/form-data">
         {{ form|crispy }}
         {% csrf_token %}
-        <button type="submit button" class="btn btn-outline-dark">Publier ma demande</button>
+        <button type="submit button" class="btn btn-outline-dark">Enregistrer</button>
     </form>
 {% endblock content %}

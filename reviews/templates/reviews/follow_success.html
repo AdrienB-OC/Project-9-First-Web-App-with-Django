@@ -1,6 +1,38 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>Utilisateur suivi avec succès !</h2>
-    <a href="{% url 'follow' %}">Retour</a>
+    <p>Utilisateur suivi avec succès !</p>
+    <h3 class="follow-text">Suivre d'autres utilisateurs</h3>
+    <div id="follow-form" class="border-bottom">
+        <form method="post">
+            {{ form }}
+            {% csrf_token %}
+            <button id="follow-btn" type="submit button" name="follow" class="btn btn-outline-dark">Suivre</button>
+        </form>
+    </div>
+    {% if follow %}
+        <div id="follow-list" class="border-bottom">
+            <h3 class="follow-text">Utilisateurs suivi</h3>
+            {% for followed in follow %}
+                <form action="/unfollow/{{ followed.id }}" method="post" class="follow-list border-bottom">
+                    {% csrf_token %}
 
+                    {{ followed.username }}
+                    <button type="submit button" name="unfollow"
+                            value="{{ followed.id }}" class="btn btn-outline-dark unfollow-btn">Ne plus suivre</button>
+
+                </form>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if followed_by %}
+        <div id="followers" class="border-bottom">
+            <h3 class="follow-text">Utilisateurs qui vous suivent</h3>
+            {% for follower in followed_by %}
+
+                    <p class="follow-list border-bottom">{{ follower.username }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock content %}

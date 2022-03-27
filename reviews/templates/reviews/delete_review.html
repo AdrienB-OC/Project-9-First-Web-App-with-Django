@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p class="delete-msg">Etes-vous sûr de vouloir supprimer cette critique ? </p>
+    <div class="delete-post">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button type="submit button" class="btn btn-outline-danger delete-yes">Oui</button>
+            <a href="/home/" type="button" class="btn btn-outline-dark delete-no">Non</a>
+        </form>
+
+    </div>
+
+    <div class="review-display">   
+                <p class="post-time">{{ post.time_created }}</p>    
+                {% if request.user == post.user %}      
+                    <p class="post-author"> <strong>Vous</strong> avez posté une critique</p>
+                {% else %}
+                    <p class="post-author"> <strong>{{ post.user.username }}</strong> a posté une critique</p>
+                {% endif %}
+                <p class="post-title">{{ post.headline }}</p>
+                <div class="rating">
+
+                {% for i in rating_list %}
+                    {% if i <= post.rating %}
+                        <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    {% else %}
+                        <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    {% endif %}
+                {% endfor %}
+
+                </div>
+                <p class="post-body">{{ post.body }}</p>
+
+
+                <!-- Parent ticket -->
+                <div class="related-ticket">
+                    <p class="post-author">Auteur de la demande : <strong>{{ post.ticket.user.username }}</strong></p>
+                    <p class="post-title"><strong>{{ post.ticket.title }}</strong></p>
+                    <p class="post-body">{{ post.ticket.description }}</p>
+
+                    {% if post.ticket.image.url != NULL %}
+                        <img src="{{ post.ticket.image.url }}" alt="{{ post.ticket.title}}" title="{{ post.ticket.title}}" width="150" height="250">
+                    {% endif %}
+
+                </div>
+
+            </div>
+{% endblock content %}

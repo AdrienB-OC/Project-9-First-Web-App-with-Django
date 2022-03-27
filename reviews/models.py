@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Ticket(models.Model):
-    title = models.CharField("Titre du livre", max_length=128)
+    title = models.CharField("Titre et auteur du livre", max_length=128)
     description = models.TextField("Votre demande", max_length=2048,
                                    blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -15,10 +15,12 @@ class Ticket(models.Model):
 
 class Review(models.Model):
     ticket = models.OneToOneField(Ticket, on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)])
-    headline = models.CharField("Titre", max_length=128)
-    body = models.CharField("Critique", max_length=8192, blank=True)
+    rating = models.PositiveSmallIntegerField("Note",
+                                              validators=[
+                                                  MinValueValidator(0),
+                                                  MaxValueValidator(5)])
+    headline = models.CharField("Titre de la critique", max_length=128)
+    body = models.TextField("Critique", max_length=8192, blank=True)
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     time_created = models.DateTimeField(auto_now_add=True)

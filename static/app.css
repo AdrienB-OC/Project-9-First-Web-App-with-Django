@@ -1,24 +1,273 @@
 body {
     background-color: #fff;
     font-family:  Verdana, Tahoma, Garamond, Georgia, sans-serif; 
+
 }
+
+.content {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+#site-name {
+    text-align: left;
+    color: white;
+    margin-left: 5%;
+    font-size: 1.5em;
+
+}
+/* --------------------- Feed --------------------- */
 
 .ticket-display{
     border: solid 2px black;
+    border-radius: 5px;
     padding: 10px;
+    margin: auto;
     margin-bottom: 10px;
+    width: 90%;
+    background-color: #fff;
+
 }
 
 .review-display{
     border: solid 2px black;
+    border-radius: 5px;
     padding: 10px;
+    margin: auto;
     margin-bottom: 10px;
+    width: 90%;
+    background-color: #fff;
 }
 
 .related-ticket{
 
     border: solid 2px black;
+    border-radius: 5px;
     width: 80%;
     margin: auto;
     padding: 10px;
+    background-color: #fff;
+}
+
+.post-actions {
+    margin: 5px;
+    text-align: right;
+}
+
+.post-body {
+    margin-left: 5px;
+    margin-top: 30px;
+}
+
+.post-img {
+    margin-left: 50px;
+    margin-top: 10px;
+}
+
+.post-time{
+    float: right;
+}
+
+.answer-ticket{
+    border: solid 2px black;
+    border-radius: 5px;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.create-post {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+
+}
+
+
+/* --------------------- Login/Signup --------------------- */
+
+.flex-container {
+    margin-top: 10%;
+    display: flex;
+}
+
+.flex-child {
+    display: grid;
+    align-items: center;
+    flex: 1;
+
+}  
+
+.flex-child:first-child {
+    margin-right: 20px;
+} 
+
+.sign-up a{
+    width: 50%;
+    margin: auto;
+}
+
+.login form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+}
+.login form{
+    width: 50%;
+    margin: auto;
+}
+#login-button {
+    justify-content: center;
+
+
+}
+
+.flex-container form table{
+    visibility: visible;
+    margin-left: 10%;
+}
+
+#signup{
+    margin-right: 30%;
+    margin-left: 30%;
+    align-content: center;
+}
+
+#signup ul li{
+    display: none;
+}
+/* display: block; */
+
+.signup-btn {
+    float: right;
+}
+
+.signup-btn {
+    margin: 3px;
+}
+
+#login-title {
+    text-align: center;
+
+}
+
+#signup-buttons {
+    display:  flex;
+    justify-content: center;
+}
+
+/* --------------------- Top Nav --------------------- */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: #f2f2f2;
+  text-align: right;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+} 
+
+/* --------------------- Follow page  --------------------- */
+
+#follow-btn {
+    align-items: left;
+}
+
+#id_follow_user {
+    text-align: center;
+    width: 40%;
+    margin-left: 30%;
+}
+
+.unfollow-btn {
+    float: right;
+    margin: 0 auto;
+}
+
+.follow-list {
+    margin-right: 20%;
+    margin-left: 20%;
+
+    padding-bottom: 13px;
+    font-size: 1.2em;
+
+}
+
+#follow-list {
+    margin-top: 5%;
+}
+
+#follow-form {
+    margin-top: 5%;
+    display: block;
+}
+
+#followers {
+    margin-top: 5%;
+}
+
+.follow-text {
+    text-align: left;
+    padding-left: 10%;
+    margin-top: 2%;
+    margin-bottom: 70px;
+
+}
+
+
+/*  --------------------- Post deletion --------------------- */
+
+.delete-no {
+    margin: 3px;
+}
+
+.delete-yes {
+
+
+}
+
+.delete-post {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.delete-msg {
+    text-align: center;
+}
+
+
+#msg-modal {
+    display: block;
+}
+
+#div_id_rating div{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+}
+
+dialog {
+    border-color: red;
 }

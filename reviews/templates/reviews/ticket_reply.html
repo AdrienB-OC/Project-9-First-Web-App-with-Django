@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>Vous répondez à la requête suivante :</h2>
+    <h2>Vous répondez à la demande suivante :</h2>
+    <div class="answer-ticket">
+    <p class="post-time">{{ ticket.time_created }}</p>    
     <p>{{ ticket.user.username }}</p>
     <p>{{ ticket.title }}</p>
     <p>{{ ticket.description }}</p>
-    <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}"
-         title="{{ ticket.title }}"
-             width="150"
-             height="250">
+    {% if ticket.image %}
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" title="{{ ticket.title }}" width="150" height="250">
+    {% endif %}
+    </div>
+
+
     <form method="post">
-        {{ form.as_p }}
+        {{ form|crispy }}
         {% csrf_token %}
-        <button type="submit">Envoyer ma critique</button>
+        <button type="submit button" class="btn btn-outline-dark">Envoyer ma critique</button>
     </form>
 {% endblock content %}

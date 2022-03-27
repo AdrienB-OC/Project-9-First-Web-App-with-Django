@@ -1,8 +1,10 @@
-from django.views.generic import ListView, DetailView, TemplateView, FormView
-from django.shortcuts import render, redirect, reverse
+from django.views.generic import ListView, DetailView, TemplateView, \
+    FormView, UpdateView, DeleteView
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.db.models import Q
 from itertools import chain
 from . import forms, models
@@ -15,37 +17,35 @@ def home(request):
     
     tickets = models.Ticket.objects.filter(
         Q(user__in=user.follow.all()) | Q(user=user))
-    print(tickets)
+
     reviews = models.Review.objects.filter(
         Q(user__in=user.follow.all()) | Q(user=user))
-    print(reviews)
+
+    posts_list = sorted(chain(tickets, reviews),
+                        key=lambda x: x.time_created, reverse=True)
+
+    rating_list = [1, 2, 3, 4, 5]
     context = {
-        'posts': tickets,
-        'reviews': reviews,
+        'list': posts_list,
+        'rating_list': rating_list,
     }
     return render(request, 'reviews/home.html', context=context)
 
 
-class HomeView(LoginRequiredMixin, ListView):
-    template_name = 'reviews/home.html'
-    context_object_name = 'posts_lists'
-    model = models.Ticket
+@login_required
+def posts(request):
+    user = request.user
 
-    def get_context_data(self, **kwargs):
-        user = self.request.user
-        context = super(HomeView, self).get_context_data(**kwargs)
-        tickets = models.Ticket.objects.filter(
-            Q(user__in=user.follow.all()) | Q(user=user)
-        )
-        reviews = models.Review.objects.filter(
-            Q(user__in=user.follow.all()) | Q(user=user)
-        )
-        posts_list = sorted(chain(tickets, reviews),
-                            key=lambda x: x.time_created, reverse=True)
-        context.update({
-            'list': posts_list,
-        })
-        return context
+    tickets = models.Ticket.objects.filter(user=user)
+    print(tickets)
+    reviews = models.Review.objects.filter(user=user)
+    print(reviews)
+    posts_list = sorted(chain(tickets, reviews),
+                        key=lambda x: x.time_created, reverse=True)
+    context = {
+        'list': posts_list,
+    }
+    return render(request, 'reviews/posts.html', context=context)
 
 
 @login_required
@@ -66,18 +66,15 @@ def write_ticket(request):
     return render(request, 'reviews/ticket.html', context={'form': form})
 
 
-class WriteTicketView(LoginRequiredMixin, FormView):
-    template_name = 'reviews/ticket.html'
-    form_class = forms.TicketForm
-
-    success_url = 'success'
-
-
 @login_required
 def write_review(request, id):
-    form = forms.ReviewForm()
+    form = forms.ReviewForm(use_required_attribute=False)
     ticket = models.Ticket.objects.get(id=id)
+
     # check if ticket already has a review
+    if models.Review.objects.filter(ticket=ticket).exists():
+        return redirect('ticket_error')
+
     if request.method == 'POST':
         if id is None:
             return redirect('ticket_error')
@@ -86,6 +83,8 @@ def write_review(request, id):
 
         if form.is_valid():
             review = form.save(commit=False)
+            rating = form.cleaned_data.get('rating')
+            review.rating = rating
             review.user = request.user
             review.ticket = ticket
             review.save()
@@ -97,34 +96,6 @@ def write_review(request, id):
     }
 
     return render(request, 'reviews/ticket_reply.html', context=context)
-
-
-class WriteReview(LoginRequiredMixin, DetailView):
-    template_name = 'reviews/ticket_reply.html'
-    model = models.Ticket
-
-    def get_context_data(self, **kwargs):
-        context = super(WriteReview, self).get_context_data(**kwargs)
-        review_form = forms.ReviewForm()
-        context.update({
-            'review_form': review_form,
-        })
-        return context
-
-    def form_valid(self, form):
-        form.save(commit=False)
-        t_id = self.kwargs[id]
-        form.ticket = models.Ticket.objects.get(id=t_id)
-        form.save()
-        return super(WriteReview, self).form_valid(form)
-
-    def post(self, request, **kwargs):
-        context = super(WriteReview, self).get_context_data(**kwargs)
-        review_form = forms.ReviewForm()
-        context.update({
-            'review_form': review_form,
-        })
-        return HttpResponseRedirect(reverse('ticket_reply'))
 
 
 @login_required
@@ -139,6 +110,8 @@ def write_ticket_review(request):
             ticket.user = request.user
             ticket.save()
             review = review_form.save(commit=False)
+            rating = review_form.cleaned_data.get('rating')
+            review.rating = rating
             review.user = request.user
             review.ticket = ticket
             review.save()
@@ -148,6 +121,75 @@ def write_ticket_review(request):
         'review_form': review_form,
     }
     return render(request, 'reviews/create_review.html', context=context)
+
+
+@login_required
+def edit_ticket(request, id):
+
+    ticket = get_object_or_404(models.Ticket, id=id)
+    form = forms.TicketForm(instance=ticket)
+
+    if request.method == 'POST':
+        form = forms.TicketForm(request.POST, instance=ticket)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('home')
+
+    context = {
+        'ticket': ticket,
+        'form': form,
+    }
+    return render(request, 'reviews/edit_ticket.html', context=context)
+
+
+@login_required
+def delete_ticket(request, id):
+    ticket = models.Ticket.objects.get(id=id)
+
+    if request.method == 'POST':
+        ticket.delete()
+        messages.success(request, 'Ticket supprimé avec succès !')
+        return redirect('home')
+
+    return render(request, 'reviews/delete_ticket.html', context={'post':
+                                                                  ticket})
+
+
+@login_required
+def edit_review(request, id):
+
+    review = get_object_or_404(models.Review, id=id)
+    form = forms.ReviewForm(instance=review)
+
+    if request.method == 'POST':
+        form = forms.ReviewForm(request.POST, instance=review)
+
+        if form.is_valid():
+            form.save()
+            review.rating = form.cleaned_data.get('rating')
+            review.save()
+            return redirect('home')
+
+    context = {
+        'review': review,
+        'form': form,
+    }
+    return render(request, 'reviews/edit_review.html', context=context)
+
+
+@login_required
+def delete_review(request, id):
+    review = models.Review.objects.get(id=id)
+
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Critique supprimée avec succès !')
+        return redirect('home')
+
+    return render(request, 'reviews/delete_review.html', context={'post':
+                                                                  review})
 
 
 @login_required
@@ -170,19 +212,57 @@ def follow_user(request):
     followed_by = User.objects.all().filter(pk__in=followed_list)
 
     if request.method == 'POST':
-        form = forms.FollowForm(request.POST)
-        if form.is_valid():
-            follow_name = form.cleaned_data['follow_user']
-            follow_u = User.objects.get(username=follow_name)
-            if follow_u:
-                user_follows = models.UserFollows(user=user,
-                                                  followed_user=follow_u)
-                user_follows.save()
-                user.follow.add(follow_u)
-            #follow.user = user
-            #follow.save()
-            #user.follow.add(follow.followed_user)
-            return redirect('follow_success')
+        print(request.POST)
+
+        # Follow user
+        if 'follow' in request.POST:
+            form = forms.FollowForm(request.POST)
+
+            if form.is_valid():
+                follow_name = form.cleaned_data['follow_user']
+                # Check if there is an user with this username
+                try:
+                    follow_u = User.objects.get(username=follow_name)
+                except:
+                    follow_u = 'NULL'
+
+                if follow_u != 'NULL':
+                    # Make sure current user isn't already following that user
+                    try:
+                        exists = models.UserFollows.objects.get(
+                            user=user, followed_user=follow_u)
+                    except:
+                        exists = 'NULL'
+
+                    if exists == 'NULL':
+                        user_follows = models.UserFollows(
+                            user=user, followed_user=follow_u)
+                        user_follows.save()
+                        user.follow.add(follow_u)
+                        messages.success(
+                            request, 'Utilisateur suivi avec succès !')
+
+                        return redirect('follow')
+                    else:
+                        messages.error(
+                            request, 'Vous suivez déjà cet utilisateur !')
+
+                        return redirect('follow')
+
+                else:
+                    messages.error(request,  "Cet utilisateur n'existe pas !")
+                    return redirect('follow')
+
+        # Unfollow user
+        elif 'unfollow' in request.POST:
+            followed_user = User.objects.get(id=request.POST['unfollow'])
+            user.follow.remove(followed_user)
+            user_follow = models.UserFollows.objects.filter(
+                user=user.pk, followed_user=followed_user.pk)
+            user_follow.delete()
+            messages.success(request, 'Vous ne suivez plus cet utilisateur !')
+
+            return redirect('follow')
 
     context = {
         'form': form,
@@ -191,35 +271,3 @@ def follow_user(request):
     }
 
     return render(request, 'reviews/follow_page.html', context=context)
-
-
-@login_required
-def unfollow_user(request, id):
-    user = request.user
-    followed_user = User.objects.get(pk=id)
-
-    if request.method == 'POST':
-        user.follow.remove(followed_user)
-        user_follow = models.UserFollows.objects.filter(
-            user=user.pk, followed_user=followed_user.pk)
-        user_follow.delete()
-
-    return render(request, 'reviews/unfollow.html', context={
-        'followed_user': followed_user})
-
-
-@login_required
-def follow_success(request):
-    context = {}
-    if request == 'POST':
-        user = User.objects.get(username='search')
-        context.update({
-            'user_followed': user,
-        })
-
-    return render(request, 'reviews/follow_success.html',
-                  context=context)
-
-
-class Follow(LoginRequiredMixin, ListView):
-    pass

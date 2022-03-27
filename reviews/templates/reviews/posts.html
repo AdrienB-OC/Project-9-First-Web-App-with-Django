@@ -1,13 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-        <div id="msg-modal-home">
-            <dialog open>{{ message }}</dialog>
-        </div>
-        {% endfor %}
-    {% endif %}
-
     <div class="create-post">
         <a href="{% url 'post_review' %}" type="button" class="btn btn-outline-dark">Poster une critique</a>
         <a href="{% url 'write_ticket' %}" type="button" class="btn btn-outline-dark">Demander une critique</a>
@@ -52,7 +44,6 @@
         </div>
         {% endif %}
 
-
         <!-- Review -->
         {% if post.headline %}
             <div class="review-display">   
@@ -62,17 +53,45 @@
                 {% else %}
                     <p class="post-author"> <strong>{{ post.user.username }}</strong> a posté une critique</p>
                 {% endif %}
-                <p class="post-title"><strong> {{ post.headline }} </strong></p>
+                <p class="post-title">{{ post.headline }}</p>
                 <div class="rating">
-
-                {% for i in rating_list %}
-                    {% if i <= post.rating %}
-                        <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    {% else %}
-                        <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    {% endif %}
-                {% endfor %}
-
+                {% if post.rating > 4 %}
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                {% elif post.rating > 3 %}
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                {% elif post.rating > 2 %}
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                {% elif post.rating > 1 %}
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                {% elif post.rating > 0 %}
+                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                {% else %}
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                {% endif %}
                 </div>
                 <p class="post-body">{{ post.body }}</p>
 
