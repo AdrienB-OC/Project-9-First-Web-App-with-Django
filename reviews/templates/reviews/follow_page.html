@@ -10,7 +10,7 @@
         {% endfor %}
     {% endif %}
 
-    <h3 class="follow-text">Suivre d'autres utilisateurs :</h3>
+    <h3 class="follow-text"><i class="bi-person-plus" style="font-size: 1.5rem; color: black;"></i>  Suivre d'autres utilisateurs :</h3>
     <div id="follow-form" class="">
         <form method="post">
             {{ form }}
@@ -20,14 +20,14 @@
     </div>
     {% if follow %}
         <div id="follow-list" class="border-top">
-            <h3 class="follow-text">Utilisateurs suivi :</h3>
+            <h3 class="follow-text"><i class="bi-person-check-fill" style="font-size: 1.5rem; color: black;"></i> Abonnements :</h3>
             {% for followed in follow %}
                 <form method="post" class="follow-list border-bottom">
                     {% csrf_token %}
       
                     {{ followed.username }}
                     <button type="submit button" name="unfollow"
-                            value="{{ followed.id }}" class="btn btn-outline-dark unfollow-btn">Ne plus suivre</button>
+                            value="{{ followed.id }}" class="btn btn-outline-danger unfollow-btn"><i class="bi-person-dash" style="font-size: 1.5rem; color: black;"></i></button>
 
                 </form>
             {% endfor %}
@@ -36,7 +36,7 @@
 
     {% if followed_by %}
         <div id="followers" class="border-top">
-            <h3 class="follow-text">Utilisateurs qui vous suivent :</h3>
+            <h3 class="follow-text"><i class="bi-person-fill" style="font-size: 1.5rem; color: black;"></i> Abonnés :</h3>
             {% for follower in followed_by %}
 
                     <p class="follow-list border-bottom">{{ follower.username }}</p>

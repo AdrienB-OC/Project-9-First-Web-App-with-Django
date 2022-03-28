@@ -5,11 +5,12 @@
     <div class="flex-container">
 
         <div class="flex-child sign-up">
-
+            <h3 class="login-sub">Inscription</h3>
             <a href="{% url 'signup' %}" type="button" class="btn btn-outline-dark signup-btn">Inscrivez-vous !</a>
         </div>
 
         <div class="flex-child login">
+            <h3 class="login-sub login-2">Connexion</h3>
             <form method="post">
                 <table>
                 {{ form|crispy }}

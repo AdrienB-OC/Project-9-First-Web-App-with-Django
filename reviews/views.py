@@ -1,9 +1,5 @@
-from django.views.generic import ListView, DetailView, TemplateView, \
-    FormView, UpdateView, DeleteView
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models import Q
 from itertools import chain
@@ -42,8 +38,10 @@ def posts(request):
     print(reviews)
     posts_list = sorted(chain(tickets, reviews),
                         key=lambda x: x.time_created, reverse=True)
+    rating_list = [1, 2, 3, 4, 5]
     context = {
         'list': posts_list,
+        'rating_list': rating_list,
     }
     return render(request, 'reviews/posts.html', context=context)
 
@@ -62,23 +60,35 @@ def write_ticket(request):
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
+
+            messages.success(request, "Ticket créé avec succès !")
+
             return redirect('home')
+
     return render(request, 'reviews/ticket.html', context={'form': form})
 
 
 @login_required
 def write_review(request, id):
     form = forms.ReviewForm(use_required_attribute=False)
-    ticket = models.Ticket.objects.get(id=id)
+
+    # check if ticket exists
+    try:
+        ticket = models.Ticket.objects.get(id=id)
+    except:
+        ticket = 'NULL'
+
+    if ticket == 'NULL':
+        messages.error(request, "Erreur : ce ticket n'existe pas !")
+        return redirect('home')
 
     # check if ticket already has a review
     if models.Review.objects.filter(ticket=ticket).exists():
-        return redirect('ticket_error')
+        messages.error(request, "Erreur : ce ticket a déjà une réponse, "
+                                "impossible d'y répondre !")
+        return redirect('home')
 
     if request.method == 'POST':
-        if id is None:
-            return redirect('ticket_error')
-
         form = forms.ReviewForm(request.POST)
 
         if form.is_valid():
@@ -88,6 +98,9 @@ def write_review(request, id):
             review.user = request.user
             review.ticket = ticket
             review.save()
+
+            messages.success(request, "Critique postée avec succès !")
+
             return redirect('home')
 
     context = {
@@ -115,6 +128,9 @@ def write_ticket_review(request):
             review.user = request.user
             review.ticket = ticket
             review.save()
+
+            messages.success(request, "Critique créée avec succès !")
+
             return redirect('home')
     context = {
         'ticket_form': ticket_form,
@@ -134,8 +150,9 @@ def edit_ticket(request, id):
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Ticket édité avec succès !')
 
-            return redirect('home')
+            return redirect('posts')
 
     context = {
         'ticket': ticket,
@@ -151,7 +168,8 @@ def delete_ticket(request, id):
     if request.method == 'POST':
         ticket.delete()
         messages.success(request, 'Ticket supprimé avec succès !')
-        return redirect('home')
+
+        return redirect('posts')
 
     return render(request, 'reviews/delete_ticket.html', context={'post':
                                                                   ticket})
@@ -170,7 +188,10 @@ def edit_review(request, id):
             form.save()
             review.rating = form.cleaned_data.get('rating')
             review.save()
-            return redirect('home')
+
+            messages.success(request, 'Critique éditée avec succès !')
+
+            return redirect('posts')
 
     context = {
         'review': review,
@@ -186,7 +207,8 @@ def delete_review(request, id):
     if request.method == 'POST':
         review.delete()
         messages.success(request, 'Critique supprimée avec succès !')
-        return redirect('home')
+
+        return redirect('posts')
 
     return render(request, 'reviews/delete_review.html', context={'post':
                                                                   review})
@@ -251,6 +273,7 @@ def follow_user(request):
 
                 else:
                     messages.error(request,  "Cet utilisateur n'existe pas !")
+
                     return redirect('follow')
 
         # Unfollow user
@@ -260,6 +283,7 @@ def follow_user(request):
             user_follow = models.UserFollows.objects.filter(
                 user=user.pk, followed_user=followed_user.pk)
             user_follow.delete()
+
             messages.success(request, 'Vous ne suivez plus cet utilisateur !')
 
             return redirect('follow')

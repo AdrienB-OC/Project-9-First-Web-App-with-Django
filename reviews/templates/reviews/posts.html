@@ -1,23 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div id="msg-modal-home">
+            <dialog open>{{ message }}</dialog>
+        </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="create-post">
         <a href="{% url 'post_review' %}" type="button" class="btn btn-outline-dark">Poster une critique</a>
         <a href="{% url 'write_ticket' %}" type="button" class="btn btn-outline-dark">Demander une critique</a>
     </div>
     {% for post in list %}
-        <!-- Ticket -->
+
+        <!---------------------- Ticket ---------------------->
 
         {% if post.title %}
         <div class="ticket-display">
                 <p class="post-time">{{ post.time_created }}</p>
                 {% if request.user == post.user %}      
-                    <p class="post-author"> <strong>Vous</strong> avez posté une demande critique</p>
+                    <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> <strong>Vous</strong> avez posté une demande critique</p>
                 {% else %}
-                    <p class="post-author"> <strong>{{ post.user.username }}</strong> a posté une demande critique</p>
+                    <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> <strong>{{ post.user.username }}</strong> a posté une demande critique</p>
                 {% endif %}
 
-                <p class="post-title"> <strong> {{ post.title }} </strong></p>
-                <p class="post-body"> {{ post.description }} </p>
+                <p class="post-title"><i class="bi-book" style="font-size: 1.5rem; color: black;"></i> <strong> {{ post.title }} </strong></p>
+
+                {% if post.description %}
+                    <p class="post-body"><i class="bi-pen" style="font-size: 1.5rem; color: black;"></i> {{ post.description }} </p>
+                {% endif %}
 
                 {% if post.image.url != NULL %}
                     <img class="post-img" src="{{ post.image.url }}" alt="{{ post.title}}" title="{{ post.title}}" width="150" height="250">
@@ -44,57 +56,35 @@
         </div>
         {% endif %}
 
-        <!-- Review -->
+
+        <!---------------------- Review ---------------------->
+
         {% if post.headline %}
             <div class="review-display">   
                 <p class="post-time">{{ post.time_created }}</p>    
                 {% if request.user == post.user %}      
-                    <p class="post-author"> <strong>Vous</strong> avez posté une critique</p>
+                    <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> <strong>Vous</strong> avez posté une critique</p>
                 {% else %}
-                    <p class="post-author"> <strong>{{ post.user.username }}</strong> a posté une critique</p>
+                    <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> <strong>{{ post.user.username }}</strong> a posté une critique</p>
                 {% endif %}
-                <p class="post-title">{{ post.headline }}</p>
-                <div class="rating">
-                {% if post.rating > 4 %}
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                {% elif post.rating > 3 %}
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                {% elif post.rating > 2 %}
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                {% elif post.rating > 1 %}
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                {% elif post.rating > 0 %}
-                    <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                {% else %}
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                    <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
-                {% endif %}
-                </div>
-                <p class="post-body">{{ post.body }}</p>
+                <div class="headline">
+                    <p class="post-title"><i class="bi-book-half" style="font-size: 1.5rem; color: black;"></i> <strong> {{ post.headline }} &nbsp;-&nbsp; </strong> </p>
+                    <div class="rating">
 
+                    {% for i in rating_list %}
+                        {% if i <= post.rating %}
+                            <i class="bi-star-fill" style="font-size: 1.5rem; color: black;"></i>
+                        {% else %}
+                            <i class="bi-star" style="font-size: 1.5rem; color: black;"></i>
+                        {% endif %}
+                    {% endfor %}
+
+                    </div>
+                </div>
+
+                {% if post.body %}
+                    <p class="post-body"><i class="bi-pen" style="font-size: 1.5rem; color: black;"></i> {{ post.body }}</p>
+                {% endif %}
 
                 {% if post.user == request.user%}
                 <div class="post-actions">
@@ -104,11 +94,20 @@
                 </div>
                 {% endif %}
 
-                <!-- Parent ticket -->
+                <!---------------------- Parent ticket ---------------------->
+                
                 <div class="related-ticket">
-                    <p class="post-author">Auteur de la demande : <strong>{{ post.ticket.user.username }}</strong></p>
-                    <p class="post-title"><strong>{{ post.ticket.title }}</strong></p>
-                    <p class="post-body">{{ post.ticket.description }}</p>
+                    {% if request.user == post.user %}
+                        <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> Auteur de la demande : <strong>Vous</strong></p>
+                    {% else %}
+                        <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> Auteur de la demande : <strong>{{ post.ticket.user.username }}</strong></p>
+                    {% endif %}
+
+                    <p class="post-title"><i class="bi-book" style="font-size: 1.5rem; color: black;"></i> <strong>{{ post.ticket.title }}</strong></p>
+
+                    {% if post.ticket.description %}
+                        <p class="post-body"><i class="bi-pen" style="font-size: 1.5rem; color: black;"></i> {{ post.ticket.description }}</p>
+                    {% endif %}
 
                     {% if post.ticket.image.url != NULL %}
                         <img src="{{ post.ticket.image.url }}" alt="{{ post.ticket.title}}" title="{{ post.ticket.title}}" width="150" height="250">
