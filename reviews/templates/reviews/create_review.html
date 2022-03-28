@@ -4,6 +4,9 @@
     <h2 class="post-creation">Poster une critique</h2>
     <form method="post" enctype="multipart/form-data">
         {{ ticket_form|crispy }}
+        <label for="id_image" id="id_image">
+        <img style="max-height:250px;max-width: 250px;" src="" alt="">
+        </label>
         {{ review_form|crispy }}
         {% csrf_token %}
         <div class="form-buttons">

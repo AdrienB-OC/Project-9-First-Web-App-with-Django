@@ -5,6 +5,10 @@
     <form method="post" enctype="multipart/form-data">
         {{ form|crispy }}
         {% csrf_token %}
+        <label for="id_image" id="id_image">
+        <img style="max-height:250px;max-width: 250px;" src="" alt="" >
+        </label>
+
         <div class="form-buttons">
             <button type="submit button" class="btn btn-outline-dark form-btn">Publier ma demande</button>
             <a href="/home/" type="button" class="btn btn-outline-danger form-btn">Annuler</a>
