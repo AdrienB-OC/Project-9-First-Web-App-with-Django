@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h2>Vous répondez à la demande suivante :</h2>
+    <h2 class="post-creation">Vous répondez à la demande suivante :</h2>
     <div class="answer-ticket">
     <p class="post-time">{{ ticket.time_created }}</p>    
     <p>{{ ticket.user.username }}</p>

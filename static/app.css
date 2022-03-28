@@ -89,6 +89,12 @@ body {
     flex-direction: row;
 }
 
+.post-creation {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
 /* --------------------- Login/Signup --------------------- */
 
 .flex-container {
