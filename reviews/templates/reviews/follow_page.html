@@ -26,7 +26,7 @@
                     <form method="post" class="follow-list border-bottom">
                         {% csrf_token %}
           
-                        {{ followed.username }}
+                        <i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> {{ followed.username }}
                         <button type="submit button" name="unfollow"
                                 value="{{ followed.id }}" class="btn btn-outline-danger unfollow-btn"><i class="bi-person-dash" style="font-size: 1.5rem; color: black;"></i></button>
 
@@ -44,7 +44,7 @@
             {% if followed_by %}
                 {% for follower in followed_by %}
 
-                        <p class="follow-list border-bottom">{{ follower.username }}</p>
+                        <p class="follow-list border-bottom"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> {{ follower.username }}</p>
                 {% endfor %}
             {% else %}
                 <p class="follow-list">Personne ne vous suit.</p>
