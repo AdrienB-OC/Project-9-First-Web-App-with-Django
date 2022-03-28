@@ -18,30 +18,37 @@
             <button id="follow-btn" type="submit button" name="follow" class="btn btn-outline-dark">Suivre</button>
         </form>
     </div>
-    {% if follow %}
+    
         <div id="follow-list" class="border-top">
             <h3 class="follow-text"><i class="bi-person-check-fill" style="font-size: 1.5rem; color: black;"></i> Abonnements :</h3>
-            {% for followed in follow %}
-                <form method="post" class="follow-list border-bottom">
-                    {% csrf_token %}
-      
-                    {{ followed.username }}
-                    <button type="submit button" name="unfollow"
-                            value="{{ followed.id }}" class="btn btn-outline-danger unfollow-btn"><i class="bi-person-dash" style="font-size: 1.5rem; color: black;"></i></button>
+            {% if follow %}
+                {% for followed in follow %}
+                    <form method="post" class="follow-list border-bottom">
+                        {% csrf_token %}
+          
+                        {{ followed.username }}
+                        <button type="submit button" name="unfollow"
+                                value="{{ followed.id }}" class="btn btn-outline-danger unfollow-btn"><i class="bi-person-dash" style="font-size: 1.5rem; color: black;"></i></button>
 
-                </form>
-            {% endfor %}
+                    </form>
+                {% endfor %}
+            {% else %}
+                <p class="follow-list">Vous ne suivez personne.</p>
+        
+            {% endif %}
         </div>
-    {% endif %}
 
-    {% if followed_by %}
+    
         <div id="followers" class="border-top">
             <h3 class="follow-text"><i class="bi-person-fill" style="font-size: 1.5rem; color: black;"></i> Abonnés :</h3>
-            {% for follower in followed_by %}
+            {% if followed_by %}
+                {% for follower in followed_by %}
 
-                    <p class="follow-list border-bottom">{{ follower.username }}</p>
-            {% endfor %}
+                        <p class="follow-list border-bottom">{{ follower.username }}</p>
+                {% endfor %}
+            {% else %}
+                <p class="follow-list">Personne ne vous suit.</p>
+            {% endif %}
         </div>
-    {% endif %}
 {% endblock content %}
 

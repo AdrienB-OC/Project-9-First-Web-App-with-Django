@@ -12,6 +12,12 @@
         <a href="{% url 'post_review' %}" type="button" class="btn btn-outline-dark">Poster une critique</a>
         <a href="{% url 'write_ticket' %}" type="button" class="btn btn-outline-dark">Demander une critique</a>
     </div>
+    {% if not post %}
+        <div class="ticket-display">
+            <p>Bienvenue sur votre page de gestion de posts.</p>
+            <p>Vos <a href="{% url 'post_review' %}">critiques</a> et <a href="{% url 'write_ticket' %}">demandes de critique</a> s'afficheront ici afin que vous puissiez les éditer ou les supprimer</p>
+        </div>
+    {% endif %}
     {% for post in list %}
 
         <!---------------------- Ticket ---------------------->
@@ -95,7 +101,7 @@
                 {% endif %}
 
                 <!---------------------- Parent ticket ---------------------->
-                
+
                 <div class="related-ticket">
                     {% if request.user == post.user %}
                         <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> Auteur de la demande : <strong>Vous</strong></p>

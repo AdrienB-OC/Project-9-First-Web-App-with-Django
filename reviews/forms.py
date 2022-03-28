@@ -1,5 +1,5 @@
 from django import forms
-
+from django.forms.widgets import TextInput
 from . import models
 
 
@@ -23,7 +23,8 @@ class ReviewForm(forms.ModelForm):
 
 
 class FollowForm(forms.ModelForm):
-    follow_user = forms.CharField(label="")
+    follow_user = forms.CharField(
+        label="", widget=TextInput(attrs={'placeholder': "Nom d'utilisateur"}))
 
     class Meta:
         model = models.UserFollows
