@@ -21,6 +21,8 @@ class ReviewForm(forms.ModelForm):
         model = models.Review
         fields = ['headline', 'body']
 
+    field_order = ['headline', 'rating', 'body']
+
 
 class FollowForm(forms.ModelForm):
     follow_user = forms.CharField(
