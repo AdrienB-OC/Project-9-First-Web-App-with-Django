@@ -103,7 +103,7 @@
                 <!---------------------- Parent ticket ---------------------->
 
                 <div class="related-ticket">
-                    {% if request.user == post.user %}
+                    {% if request.user == post.ticket.user %}
                         <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> Auteur de la demande : <strong>Vous</strong></p>
                     {% else %}
                         <p class="post-author"><i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> Auteur de la demande : <strong>{{ post.ticket.user.username }}</strong></p>
