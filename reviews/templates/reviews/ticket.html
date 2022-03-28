@@ -5,6 +5,9 @@
     <form method="post" enctype="multipart/form-data">
         {{ form|crispy }}
         {% csrf_token %}
-        <button type="submit button" class="btn btn-outline-dark">Publier ma demande</button>
+        <div class="form-buttons">
+            <button type="submit button" class="btn btn-outline-dark form-btn">Publier ma demande</button>
+            <a href="/home/" type="button" class="btn btn-outline-danger form-btn">Annuler</a>
+        </div>
     </form>
 {% endblock content %}

@@ -6,6 +6,9 @@
         {{ ticket_form|crispy }}
         {{ review_form|crispy }}
         {% csrf_token %}
-        <button type="submit button" class="btn btn-outline-dark">Publier ma critique</button>
+        <div class="form-buttons">
+            <button type="submit button" class="btn btn-outline-dark form-btn">Publier ma critique</button>
+            <a href="/home/" type="button" class="btn btn-outline-danger form-btn">Annuler</a>
+        </div>
     </form>
 {% endblock content %}
