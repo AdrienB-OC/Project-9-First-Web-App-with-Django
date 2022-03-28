@@ -12,7 +12,7 @@
         <a href="{% url 'post_review' %}" type="button" class="btn btn-outline-dark">Poster une critique</a>
         <a href="{% url 'write_ticket' %}" type="button" class="btn btn-outline-dark">Demander une critique</a>
     </div>
-    {% if not post %}
+    {% if not list %}
         <div class="ticket-display">
             <p>Bienvenue sur votre page de gestion de posts.</p>
             <p>Vos <a href="{% url 'post_review' %}">critiques</a> et <a href="{% url 'write_ticket' %}">demandes de critique</a> s'afficheront ici afin que vous puissiez les éditer ou les supprimer</p>
