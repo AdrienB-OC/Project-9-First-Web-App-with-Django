@@ -298,3 +298,10 @@ body {
 dialog {
     border-color: red;
 }
+
+@media screen and (max-width: 1000px) {
+    .content {
+        margin-left: 7%;
+        margin-right: 7%;
+    }
+}

@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="012f0e3e-dca0-49da-b6b2-ee051801f052" name="Default Changelist" comment="" />
+    <list default="true" id="012f0e3e-dca0-49da-b6b2-ee051801f052" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/authentication/templates/authentication/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/templates/authentication/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/create_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/create_review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/delete_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/delete_review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/delete_ticket.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/delete_ticket.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/edit_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/edit_review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/edit_ticket.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/edit_ticket.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/ticket.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/ticket.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/templates/reviews/ticket_reply.html" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/templates/reviews/ticket_reply.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/app.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
