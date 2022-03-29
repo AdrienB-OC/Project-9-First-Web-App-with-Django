@@ -9,7 +9,7 @@ body {
     margin-right: 20%;
 }
 
-#site-name {
+.site-name {
     text-align: left;
     color: white;
     margin-left: 5%;
@@ -314,4 +314,10 @@ dialog {
         margin-left: 7%;
         margin-right: 7%;
     }
+
+    #signup{
+    margin-right: 5%;
+    margin-left: 5%;
+    align-content: center;
+}
 }

@@ -5,13 +5,12 @@
         {%  if user.is_authenticated %}
         <div class="topnav">
                 
-                
                 <a href="{% url 'logout' %}">Se déconnecter</a>
                 <a href="{% url 'follow' %}">Abonnements</a>
                 <a href="{% url 'posts' %}">Posts</a>
                 <a href="{% url 'home' %}">Flux</a>
                 
-            <p id="site-name">LITReview</p>
+            <p class="site-name">LITReview</p>
                   
         </div>
         {% else %}
@@ -20,7 +19,7 @@
                 <a href="{% url 'signup' %}">S'inscrire</a>
                 <a href="{% url 'login' %}">Accueil</a>
                 
-            <p id="site-name">LITReview</p>
+            <p class="site-name">LITReview</p>
                   
         </div>
         {% endif %}
@@ -30,7 +29,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="{% static 'app.css' %}">
         
-
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         
