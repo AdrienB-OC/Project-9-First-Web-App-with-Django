@@ -4,11 +4,11 @@
     <h2 class="post-creation">Vous répondez à la demande suivante :</h2>
     <div class="answer-ticket">
     <p class="post-time">{{ ticket.time_created }}</p>    
-    <p>{{ ticket.user.username }}</p>
-    <p>{{ ticket.title }}</p>
-    <p>{{ ticket.description }}</p>
+    <p class="post-author"> <i class="bi-person-square" style="font-size: 1.5rem; color: black;"></i> {{ ticket.user.username }}</p>
+    <p class="post-title"> <i class="bi-book" style="font-size: 1.5rem; color: black;"></i> {{ ticket.title }}</p>
+    <p class="post-body"> <i class="bi-pen" style="font-size: 1.5rem; color: black;"></i> {{ ticket.description }}</p>
     {% if ticket.image %}
-        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" title="{{ ticket.title }}" width="150" height="250">
+        <img class="post-img" src="{{ ticket.image.url }}" alt="{{ ticket.title }}" title="{{ ticket.title }}" width="150" height="250">
     {% endif %}
     </div>
 
