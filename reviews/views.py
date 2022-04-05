@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 from itertools import chain
 from . import forms, models
 from authentication.models import User
@@ -10,7 +11,6 @@ from authentication.models import User
 @login_required
 def home(request):
     user = request.user
-    
     tickets = models.Ticket.objects.filter(
         Q(user__in=user.follow.all()) | Q(user=user))
 
@@ -75,7 +75,7 @@ def write_review(request, id):
     # check if ticket exists
     try:
         ticket = models.Ticket.objects.get(id=id)
-    except:
+    except ObjectDoesNotExist:
         ticket = 'NULL'
 
     if ticket == 'NULL':
@@ -245,7 +245,7 @@ def follow_user(request):
                 # Check if there is an user with this username
                 try:
                     follow_u = User.objects.get(username=follow_name)
-                except:
+                except ObjectDoesNotExist:
                     follow_u = 'NULL'
 
                 if follow_u != 'NULL':
@@ -253,7 +253,7 @@ def follow_user(request):
                     try:
                         exists = models.UserFollows.objects.get(
                             user=user, followed_user=follow_u)
-                    except:
+                    except ObjectDoesNotExist:
                         exists = 'NULL'
 
                     if exists == 'NULL':

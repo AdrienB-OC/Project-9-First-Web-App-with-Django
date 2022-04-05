@@ -1,9 +1,7 @@
 from django.urls import path
-from django.shortcuts import redirect
 from .views import write_ticket, write_review, write_ticket_review, \
-    ticket_error, follow_user, \
-    edit_ticket, delete_ticket, edit_review, delete_review,\
-    home, posts
+    ticket_error, follow_user, edit_ticket, delete_ticket, edit_review, \
+    delete_review, home, posts
 
 urlpatterns = [
     path('write_ticket/', write_ticket, name='write_ticket'),

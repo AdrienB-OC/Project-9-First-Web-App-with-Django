@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import LoginView, LogoutView, \
-    PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import PasswordChangeView, \
+    PasswordChangeDoneView
 
 
 urlpatterns = [

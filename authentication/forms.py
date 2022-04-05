@@ -12,8 +12,9 @@ class SignupForm(UserCreationForm):
 
 class CustomAuthForm(AuthenticationForm):
     username = forms.CharField(label="",
-                               widget=TextInput(attrs={'class': 'validate',
-                                                       'placeholder': 'Email'}))
+                               widget=TextInput(
+                                   attrs={'class': 'validate',
+                                          'placeholder': 'Email'}))
     password = forms.CharField(label="",
                                widget=PasswordInput(attrs={'placeholder':
                                                            'Mot de Passe'}))
